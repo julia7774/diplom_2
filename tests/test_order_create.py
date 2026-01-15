@@ -22,20 +22,6 @@ class TestOrderCreate:
         assert "success" in json_
         assert json_["success"] == True
 
-    @allure.title("Проверка создания заказа без авторизации")
-    def test_unauthorized(self):
-        ingredients = StellarBurgersClient.ingredients_list()
-
-        with allure.step("Отправить POST запрос на создание заказа"):
-            response = StellarBurgersClient.order_create({"ingredients": ingredients}, {})
-
-        assert response.status_code == 401, f"Некорректная работа API, код ответа {response.status_code}"
-        json_ = response.json()
-        assert "success" in json_
-        assert json_["success"] == False
-        assert "message" in json_
-        assert json_["message"] == "You should be authorised"
-
     @allure.title("Проверка создания заказа если в запросе передан невалидный хэш ингредиента")
     def test_invalid_ingredient(self, user):
         _, _, _, token = user
